@@ -1,62 +1,78 @@
 # Number Recognition Using Neural Network
 
-Classifies handwritten digits (0–9) by processing 28×28 pixel grayscale images using a
-Convolutional Neural Network (CNN) trained on the
-[MNIST dataset](http://yann.lecun.com/exdb/mnist/).
+This is a neural network created from scratch by Jack Carter but I discovered the core concepts from a cool math YouTuber [3Blue1Brown](https://www.youtube.com/watch?v=aircAruvnKk).
+
+![MNIST Examples](https://camo.githubusercontent.com/96c0b673c785478dd8629e0c9631d017c1ec3b74629deed003249be69f73f271/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f662f66372f4d6e6973744578616d706c65734d6f6469666965642e706e67)
+
+## Process / Core Idea
+
+```
+[ Image (28×28 pixels) ]
+            ↓
+[ Flatten → 784 values ]
+            ↓
+[ Neural Network ]
+            ↓
+[ 10 Output Probabilities ]
+            ↓
+[ Predicted Digit (0–9) ]
+```
+
+## Overview
+
+This project implements a neural network from scratch to recognize handwritten digits (0-9) from the MNIST dataset using NumPy and backpropagation.
 
 ## Architecture
 
-| Layer | Details |
-|---|---|
-| Input | 28×28×1 grayscale image |
-| Conv2D (32 filters, 3×3) + ReLU | Feature extraction |
-| MaxPooling2D (2×2) | Spatial downsampling |
-| Conv2D (64 filters, 3×3) + ReLU | Deeper feature extraction |
-| MaxPooling2D (2×2) | Spatial downsampling |
-| Flatten + Dropout (0.5) | Regularisation |
-| Dense 128 + ReLU | Hidden layer for pattern recognition |
-| Dense 10 + Softmax | Output layer — one neuron per digit (0–9) |
+- **Input Layer**: 784 neurons (28×28 pixels)
+- **Hidden Layer**: 128 neurons with sigmoid activation
+- **Output Layer**: 10 neurons (digits 0-9) with softmax activation
 
-The model typically achieves **≥ 99% accuracy** on the MNIST test set.
+## How It Works
+
+1. **Forward Pass**: Pixels → Hidden layer (weighted sum + sigmoid) → Output layer (weighted sum + softmax)
+2. **Backward Pass**: Calculate gradients using backpropagation
+3. **Weight Update**: Adjust weights to minimize classification error
+4. **Training**: Repeat for multiple epochs on MNIST training images
+
+## Performance
+
+- **Accuracy**: ~97% on test set
+- **Training Data**: 50,000 images
+- **Test Data**: 10,000 images
 
 ## Requirements
 
-- Python 3.10+
-- TensorFlow ≥ 2.10
+- Python 3.7+
+- NumPy
+- Matplotlib
+- scikit-learn (for MNIST dataset)
 
 Install dependencies:
-
 ```bash
-pip install -r requirements.txt
+pip install numpy matplotlib scikit-learn
 ```
 
 ## Usage
 
-### Train
-
+Run the training and prediction:
 ```bash
-python train.py
+python neuralnetwork.py
 ```
 
-This downloads the MNIST dataset (if not already cached), trains the CNN for 10 epochs,
-prints the final test accuracy, saves the model to `mnist_cnn.keras`, and writes a
-`training_history.png` plot.
-
-### Predict
-
-```bash
-# Predict the digit in a custom image file
-python predict.py path/to/digit.png
-
-# Run a quick demo on 16 random MNIST test images
-python predict.py --demo
-```
+This will:
+1. Load the MNIST dataset
+2. Train the neural network
+3. Print accuracy metrics
+4. Display a random test image with actual and predicted labels
 
 ## Files
 
-| File | Purpose |
-|---|---|
-| `model.py` | CNN model definition (`build_cnn_model`) |
-| `train.py` | Download MNIST, train, evaluate, and save the model |
-| `predict.py` | Load the saved model and predict on new images |
-| `requirements.txt` | Python package dependencies |
+- `neuralnetwork.py` - Complete neural network implementation with training and testing
+
+## Key Concepts
+
+- **Sigmoid**: Non-linear activation function in hidden layer
+- **Softmax**: Converts output to probability distribution
+- **Backpropagation**: Calculates gradients to update weights
+- **Gradient Descent**: Optimization algorithm to minimize loss
